@@ -8,14 +8,14 @@ pipeline {
     environment {
         GIT_CREDENTIALS_ID = 'git-credentials-id'  // Utilisez l'ID des credentials ajoutés ici
         DOCKER_CREDENTIALS_ID = 'dockerhub-credentials'
-        DOCKER_IMAGE_NAME = 'your-dockerhub-username/your-image-name'
+        DOCKER_IMAGE_NAME = 'omari87/test4'
         WAR_FILE_NAME = 'ABCtechnologies-1.0.war'
     }
 
     stages {
         stage('Checkout') {
             steps {
-                git credentialsId: "${GIT_CREDENTIALS_ID}", url: 'https://github.com/abdellahomari87/test4.git', branch: 'master'
+                git credentialsId: "${GIT_CREDENTIALS_ID}", url: 'https://github.com/abdellahomari87/cc.git', branch: 'master'
             }
         }
 
@@ -37,7 +37,7 @@ pipeline {
                     sh '''
                     echo "FROM tomcat:latest" > Dockerfile
                     echo "COPY target/${WAR_FILE_NAME} /usr/local/tomcat/webapps/" >> Dockerfile
-                    docker build -t ${omari87/test4} .
+                    docker build -t ${DOCKER_IMAGE_NAME} .
                     '''
                 }
             }
