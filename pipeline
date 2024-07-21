@@ -14,7 +14,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git credentialsId: 'your-credentials-id', url: 'https://github.com/abdellahomari87/cc.git', branch: 'master'
+                git credentialsId: 'git-credentials', url: 'https://github.com/abdellahomari87/test4.git', branch: 'master'
             }
         }
 
