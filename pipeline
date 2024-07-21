@@ -6,8 +6,8 @@ pipeline {
     }
 
     environment {
-        DOCKER_CREDENTIALS_ID = 'your-dockerhub-credentials-id'
-        DOCKER_IMAGE_NAME = 'your-dockerhub-username/your-image-name'
+        DOCKER_CREDENTIALS_ID = 'dockerhub credentials'
+        DOCKER_IMAGE_NAME = 'omari87/test4'
         WAR_FILE_NAME = 'ABCtechnologies-1.0.war'
     }
 
