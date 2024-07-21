@@ -6,15 +6,16 @@ pipeline {
     }
 
     environment {
-        DOCKER_CREDENTIALS_ID = 'dockerhub credentials'
-        DOCKER_IMAGE_NAME = 'omari87/test4'
+        GIT_CREDENTIALS_ID = 'git-credentials-id'  // Utilisez l'ID des credentials ajoutés ici
+        DOCKER_CREDENTIALS_ID = 'dockerhub-credentials'
+        DOCKER_IMAGE_NAME = 'your-dockerhub-username/your-image-name'
         WAR_FILE_NAME = 'ABCtechnologies-1.0.war'
     }
 
     stages {
         stage('Checkout') {
             steps {
-                git credentialsId: 'git-credentials', url: 'https://github.com/abdellahomari87/test4.git', branch: 'master'
+                git credentialsId: "${GIT_CREDENTIALS_ID}", url: 'https://github.com/abdellahomari87/cc.git', branch: 'master'
             }
         }
 
@@ -36,7 +37,7 @@ pipeline {
                     sh '''
                     echo "FROM tomcat:latest" > Dockerfile
                     echo "COPY target/${WAR_FILE_NAME} /usr/local/tomcat/webapps/" >> Dockerfile
-                    sudo docker build -t ${DOCKER_IMAGE_NAME} .
+                    docker build -t ${DOCKER_IMAGE_NAME} .
                     '''
                 }
             }
@@ -45,10 +46,12 @@ pipeline {
         stage('Push Docker Image') {
             steps {
                 script {
-                    sh '''
-                    echo $pZtx3D4BpZtx3D4B | sudo docker login -u $omari87 --password-stdin
-                    sudo docker push ${test4}
-                    '''
+                    withCredentials([usernamePassword(credentialsId: "${DOCKER_CREDENTIALS_ID}", passwordVariable: 'DOCKERHUB_PASSWORD', usernameVariable: 'DOCKERHUB_USERNAME')]) {
+                        sh '''
+                        echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin
+                        docker push ${DOCKER_IMAGE_NAME}
+                        '''
+                    }
                 }
             }
         }
@@ -56,11 +59,11 @@ pipeline {
         stage('Deploy Docker Container') {
             steps {
                 script {
-                    def containerExists = sh(script: 'sudo docker ps -a | grep tomcat', returnStatus: true) == 0
+                    def containerExists = sh(script: 'docker ps -a | grep tomcat', returnStatus: true) == 0
                     if (containerExists) {
-                        sh 'sudo docker rm -f tomcat'
+                        sh 'docker rm -f tomcat'
                     }
-                    sh 'sudo docker run -d -p 8081:8080 --name tomcat ${DOCKER_IMAGE_NAME}'
+                    sh 'docker run -d -p 8081:8080 --name tomcat ${DOCKER_IMAGE_NAME}'
                 }
             }
         }
