@@ -15,7 +15,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git credentialsId: "${GIT_CREDENTIALS_ID}", url: 'https://github.com/abdellahomari87/cc.git', branch: 'master'
+                git credentialsId: "${GIT_CREDENTIALS_ID}", url: 'https://github.com/abdellahomari87/test4.git', branch: 'master'
             }
         }
 
@@ -37,7 +37,7 @@ pipeline {
                     sh '''
                     echo "FROM tomcat:latest" > Dockerfile
                     echo "COPY target/${WAR_FILE_NAME} /usr/local/tomcat/webapps/" >> Dockerfile
-                    docker build -t ${DOCKER_IMAGE_NAME} .
+                    docker build -t ${omari87/test4} .
                     '''
                 }
             }
